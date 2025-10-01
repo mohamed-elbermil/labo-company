@@ -1,0 +1,57 @@
+services:
+  # Frontend - À activer quand votre collègue aura créé le Dockerfile
+  # frontend:
+  #   build: ./frontend
+  #   container_name: react_frontend
+  #   ports:
+  #     - "80:80"
+  #   depends_on:
+  #     - backend
+
+  backend:
+    build: ./backend
+    container_name: Api_mariadb
+    ports:
+      - "3000:3000"
+    environment:
+      - DB_HOST=db
+      - DB_USER=user
+      - DB_PASSWORD=user
+      - DB_NAME=planningDB
+      - SESSION_SECRET=123456
+      - NODE_ENV=production
+    depends_on:
+      - db
+    restart: unless-stopped
+
+  db:
+    image: mariadb:11.4
+    container_name: mariadb
+    restart: always
+    environment:
+      - MARIADB_ROOT_PASSWORD=root
+      - MARIADB_DATABASE=planningDB
+      - MARIADB_USER=user
+      - MARIADB_PASSWORD=user
+    ports:
+      - "3306:3306"
+    volumes:
+      - mariadb_data:/var/lib/mysql
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: phpmyadmin_mariadb
+    restart: always
+    ports:
+      - "8080:80"
+    environment:
+      - PMA_HOST=db
+      - PMA_PORT=3306
+      - PMA_USER=root
+      - PMA_PASSWORD=root
+    depends_on:
+      - db
+
+volumes:
+  mariadb_data:
