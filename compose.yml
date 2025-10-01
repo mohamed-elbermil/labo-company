@@ -1,29 +1,4 @@
 services:
-  # Frontend - À activer quand votre collègue aura créé le Dockerfile
-  # frontend:
-  #   build: ./frontend
-  #   container_name: react_frontend
-  #   ports:
-  #     - "80:80"
-  #   depends_on:
-  #     - backend
-
-  backend:
-    build: ./backend
-    container_name: Api_mariadb
-    ports:
-      - "3000:3000"
-    environment:
-      - DB_HOST=db
-      - DB_USER=user
-      - DB_PASSWORD=user
-      - DB_NAME=planningDB
-      - SESSION_SECRET=123456
-      - NODE_ENV=production
-    depends_on:
-      - db
-    restart: unless-stopped
-
   db:
     image: mariadb:11.4
     container_name: mariadb
