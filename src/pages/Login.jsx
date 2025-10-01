@@ -1,12 +1,13 @@
 // Login.jsx
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "./auth.css";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const navigate = useNavigate();
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -17,7 +18,8 @@ function Login() {
     }
     // Front uniquement pour l'instant
     console.log("Login form submitted", { email, password });
-    alert("Connexion simulée (front uniquement)");
+    // Redirection simulée vers /home
+    navigate("/home", { replace: true });
   }
 
   return (
