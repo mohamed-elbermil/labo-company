@@ -38,21 +38,21 @@ async function updateEvent(req, res) {
     const { titre, description, date_debut, date_fin, type } = req.body;
 
     if (isNaN(eventId)) {
-      return res.status(400).json({ error: 'ID invalide' });
+      return res.status(400).json({ error: 'ID invalide' })
     }
 
     const [existingEvents] = await db.query('SELECT id FROM planning WHERE id = ?', [eventId]);
     
     if (existingEvents.length === 0) {
-      return res.status(404).json({ error: 'Événement non trouvé' });
+      return res.status(404).json({ error: 'Événement non trouvé' })
     }
 
-    const cleanTitre = sanitizeInput(titre);
-    const cleanDescription = description ? sanitizeInput(description) : null;
-    const cleanType = type || 'autre';
+    const cleanTitre = sanitizeInput(titre)
+    const cleanDescription = description ? sanitizeInput(description) : null
+    const cleanType = type || 'autre'
 
     if (new Date(date_fin) < new Date(date_debut)) {
-      return res.status(400).json({ error: 'La date de fin doit être après la date de début' });
+      return res.status(400).json({ error: 'La date de fin doit être après la date de début' })
     }
 
     await db.query(
@@ -62,11 +62,11 @@ async function updateEvent(req, res) {
       [cleanTitre, cleanDescription, date_debut, date_fin, cleanType, eventId]
     );
 
-    res.json({ message: 'Événement modifié avec succès' });
+    res.json({ message: 'Événement modifié avec succès' })
 
   } catch (error) {
-    console.error('Erreur lors de la modification de l\'événement:', error);
-    res.status(500).json({ error: 'Erreur lors de la modification de l\'événement' });
+    console.error('Erreur lors de la modification de l\'événement:', error)
+    res.status(500).json({ error: 'Erreur lors de la modification de l\'événement' })
   }
 }
 
@@ -75,20 +75,20 @@ async function deleteEvent(req, res) {
     const eventId = parseInt(req.params.id);
 
     if (isNaN(eventId)) {
-      return res.status(400).json({ error: 'ID invalide' });
+      return res.status(400).json({ error: 'ID invalide' })
     }
 
     const [result] = await db.query('DELETE FROM planning WHERE id = ?', [eventId]);
 
     if (result.affectedRows === 0) {
-      return res.status(404).json({ error: 'Événement non trouvé' });
+      return res.status(404).json({ error: 'Événement non trouvé' })
     }
 
-    res.json({ message: 'Événement supprimé avec succès' });
+    res.json({ message: 'Événement supprimé avec succès' })
 
   } catch (error) {
-    console.error('Erreur lors de la suppression de l\'événement:', error);
-    res.status(500).json({ error: 'Erreur lors de la suppression de l\'événement' });
+    console.error('Erreur lors de la suppression de l\'événement:', error)
+    res.status(500).json({ error: 'Erreur lors de la suppression de l\'événement' })
   }
 }
 
@@ -105,10 +105,10 @@ async function createUser(req, res) {
     );
 
     if (existingUsers.length > 0) {
-      return res.status(409).json({ error: 'Ce nom d\'utilisateur existe déjà' });
+      return res.status(409).json({ error: 'Ce nom d\'utilisateur existe déjà' })
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = await bcrypt.hash(password, 10)
 
     const [result] = await db.query(
       'INSERT INTO utilisateurs (username, password, role) VALUES (?, ?, ?)',
@@ -121,8 +121,8 @@ async function createUser(req, res) {
     });
 
   } catch (error) {
-    console.error('Erreur lors de la création de l\'utilisateur:', error);
-    res.status(500).json({ error: 'Erreur lors de la création de l\'utilisateur' });
+    console.error('Erreur lors de la création de l\'utilisateur:', error)
+    res.status(500).json({ error: 'Erreur lors de la création de l\'utilisateur' })
   }
 }
 
@@ -132,11 +132,11 @@ async function getAllUsers(req, res) {
       'SELECT id, username, role, created_at FROM utilisateurs ORDER BY created_at DESC'
     );
 
-    res.json({ users });
+    res.json({ users })
 
   } catch (error) {
-    console.error('Erreur lors de la récupération des utilisateurs:', error);
-    res.status(500).json({ error: 'Erreur lors de la récupération des utilisateurs' });
+    console.error('Erreur lors de la récupération des utilisateurs:', error)
+    res.status(500).json({ error: 'Erreur lors de la récupération des utilisateurs' })
   }
 }
 
@@ -145,24 +145,24 @@ async function deleteUser(req, res) {
     const userId = parseInt(req.params.id);
 
     if (isNaN(userId)) {
-      return res.status(400).json({ error: 'ID invalide' });
+      return res.status(400).json({ error: 'ID invalide' })
     }
 
     if (userId === req.session.userId) {
-      return res.status(400).json({ error: 'Vous ne pouvez pas supprimer votre propre compte' });
+      return res.status(400).json({ error: 'Vous ne pouvez pas supprimer votre propre compte' })
     }
 
     const [result] = await db.query('DELETE FROM utilisateurs WHERE id = ?', [userId]);
 
     if (result.affectedRows === 0) {
-      return res.status(404).json({ error: 'Utilisateur non trouvé' });
+      return res.status(404).json({ error: 'Utilisateur non trouvé' })
     }
 
-    res.json({ message: 'Utilisateur supprimé avec succès' });
+    res.json({ message: 'Utilisateur supprimé avec succès' })
 
   } catch (error) {
-    console.error('Erreur lors de la suppression de l\'utilisateur:', error);
-    res.status(500).json({ error: 'Erreur lors de la suppression de l\'utilisateur' });
+    console.error('Erreur lors de la suppression de l\'utilisateur:', error)
+    res.status(500).json({ error: 'Erreur lors de la suppression de l\'utilisateur' })
   }
 }
 
@@ -172,15 +172,15 @@ async function updateUserRole(req, res) {
     const { role } = req.body;
 
     if (isNaN(userId)) {
-      return res.status(400).json({ error: 'ID invalide' });
+      return res.status(400).json({ error: 'ID invalide' })
     }
 
     if (!['admin', 'user'].includes(role)) {
-      return res.status(400).json({ error: 'Rôle invalide' });
+      return res.status(400).json({ error: 'Rôle invalide' })
     }
 
     if (userId === req.session.userId) {
-      return res.status(400).json({ error: 'Vous ne pouvez pas modifier votre propre rôle' });
+      return res.status(400).json({ error: 'Vous ne pouvez pas modifier votre propre rôle' })
     }
 
     const [result] = await db.query(
@@ -189,15 +189,15 @@ async function updateUserRole(req, res) {
     );
 
     if (result.affectedRows === 0) {
-      return res.status(404).json({ error: 'Utilisateur non trouvé' });
+      return res.status(404).json({ error: 'Utilisateur non trouvé' })
     }
 
-    res.json({ message: 'Rôle modifié avec succès' });
+    res.json({ message: 'Rôle modifié avec succès' })
 
   } catch (error) {
     console.error('Erreur lors de la modification du rôle:', error)
-    res.status(500).json({ error: 'Erreur lors de la modification du rôle' });
+    res.status(500).json({ error: 'Erreur lors de la modification du rôle' })
   }
 }
 
-module.exports = {createEvent,updateEvent,deleteEvent,createUser,getAllUsers,deleteUser,updateUserRole};  
+module.exports = {createEvent,updateEvent,deleteEvent,createUser,getAllUsers,deleteUser,updateUserRole}  

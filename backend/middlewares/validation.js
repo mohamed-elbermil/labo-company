@@ -1,6 +1,5 @@
 const { validationResult } = require('express-validator');
 
-// Middleware pour valider les résultats des validations
 function validateRequest(req, res, next) {
   const errors = validationResult(req);
   
@@ -14,7 +13,7 @@ function validateRequest(req, res, next) {
   next();
 }
 
-// Fonction pour nettoyer les entrées (protection XSS basique)
+
 function sanitizeInput(input) {
   if (typeof input !== 'string') return input;
   
@@ -26,8 +25,5 @@ function sanitizeInput(input) {
     .replace(/\//g, '&#x2F;');
 }
 
-module.exports = {
-  validateRequest,
-  sanitizeInput
-};
+module.exports = {validateRequest,sanitizeInput}
 
