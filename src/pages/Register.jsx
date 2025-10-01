@@ -42,7 +42,7 @@ function Register() {
         )}
 
         <form onSubmit={handleSubmit}>
-          <div>
+          <div className="auth-field">
             <label className="auth-label">Pseudo</label>
             <input
               type="text"
@@ -53,7 +53,7 @@ function Register() {
               placeholder="votre_pseudo"
             />
           </div>
-          <div>
+          <div className="auth-field">
             <label className="auth-label">Email</label>
             <input
               type="email"
@@ -64,7 +64,7 @@ function Register() {
               placeholder="vous@example.com"
             />
           </div>
-          <div>
+          <div className="auth-field">
             <label className="auth-label">Mot de passe</label>
             <input
               type="password"
@@ -75,7 +75,7 @@ function Register() {
               placeholder="••••••••"
             />
           </div>
-          <div>
+          <div className="auth-field">
             <label className="auth-label">Confirmer le mot de passe</label>
             <input
               type="password"

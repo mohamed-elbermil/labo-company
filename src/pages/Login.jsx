@@ -32,7 +32,7 @@ function Login() {
         )}
 
         <form onSubmit={handleSubmit}>
-          <div>
+          <div className="auth-field">
             <label className="auth-label">Email</label>
             <input
               type="email"
@@ -43,7 +43,7 @@ function Login() {
               placeholder="vous@example.com"
             />
           </div>
-          <div>
+          <div className="auth-field">
             <label className="auth-label">Mot de passe</label>
             <input
               type="password"
