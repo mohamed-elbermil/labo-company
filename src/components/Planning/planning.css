@@ -65,17 +65,17 @@
 }
 
 .planning-event {
-	position: absolute;
-	left: 0;
-	right: 0;
-	margin: 0 8px;
-	background: #e0e7ff;
-	border: 1px solid #c7d2fe;
-	border-left: 4px solid #6366f1;
-	border-radius: 10px;
-	padding: 8px;
-	box-shadow: 0 6px 16px rgba(0,0,0,0.08);
-	overflow: hidden;
+    position: absolute;
+    left: 0;
+    right: 0;
+    margin: 0 8px;
+    background: #e0e7ff;
+    border: 1px solid #c7d2fe;
+    border-left: 4px solid #647ccf;
+    border-radius: 10px;
+    padding: 8px;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
 }
 
 .planning-event-time {
@@ -271,23 +271,23 @@
 
 /* Bouton d'ajout d'événement */
 .add-event-btn {
-	background: #10b981;
-	color: white;
-	border: none;
-	padding: 12px 20px;
-	border-radius: 10px;
-	font-weight: 600;
-	cursor: pointer;
-	transition: all 0.2s;
-	margin-bottom: 20px;
-	display: flex;
-	align-items: center;
-	gap: 8px;
-}
-
-.add-event-btn:hover {
-	background: #059669;
-	transform: translateY(-1px);
+    background: #2c334bd6;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 10px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    right: 125px;
+    position: fixed;
+    top: 90px;
+    z-index: 999;
+    backdrop-filter: blur(11px);
 }
 
 .add-event-btn svg {
@@ -347,27 +347,28 @@
 	justify-content: space-between;
 	margin-bottom: 20px;
 	padding: 16px;
-	background: #f8fafc;
+	background: #f3f4f6;
 	border-radius: 12px;
-	border: 1px solid #e2e8f0;
 }
 
 .week-nav-btn {
-	background: #6366f1;
-	color: white;
-	border: none;
-	padding: 12px;
-	border-radius: 8px;
-	cursor: pointer;
-	transition: all 0.2s;
-	display: flex;
-	align-items: center;
-	justify-content: center;
+    background: #ffffff;
+    color: #060606;
+    border: none;
+    padding: 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex
+;
+    align-items: center;
+    justify-content: center;
+    border-radius: 64px;
+    box-shadow: 64px;
 }
 
 .week-nav-btn:hover {
-	background: #5b21b6;
-	transform: translateY(-1px);
+	background: #e2e2e2;
 }
 
 .week-nav-btn svg {

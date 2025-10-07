@@ -14,12 +14,12 @@
 
 /* Variante pour pages avec une barre de navigation en haut */
 .page-container {
-	flex-direction: column;
-	min-height: 100dvh;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	padding: 24px 16px;
+    flex-direction: column;
+    min-height: 100dvh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 75px 16px;
 }
 
 .auth-card {

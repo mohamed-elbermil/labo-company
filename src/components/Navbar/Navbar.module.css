@@ -7,9 +7,12 @@
 .navbar_container {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    margin-left: 1em;
-    padding: 0 20px;
+    justify-content: space-around;
+    position: fixed;
+    width: 100%;
+    z-index: 9999;
+    background: #fff;
+    border-bottom: solid 1px #00000029;
 }
 
 .user_info {
@@ -25,18 +28,18 @@
 }
 
 .logout_btn {
-    background: #ef4444;
+    background: #F44336;
     color: white;
     border: none;
-    padding: 8px 16px;
+    padding: 11px 12px;
     border-radius: 6px;
     font-size: 14px;
     font-weight: 500;
     cursor: pointer;
     transition: all 0.2s;
+    border-radius: 44px;
 }
 
 .logout_btn:hover {
     background: #dc2626;
-    transform: translateY(-1px);
 }
