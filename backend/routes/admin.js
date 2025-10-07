@@ -11,12 +11,19 @@ const eventValidation = [
     .isLength({ max: 200 }).withMessage('Le titre ne doit pas dépasser 200 caractères'),
   body('description').optional().trim()
     .isLength({ max: 1000 }).withMessage('La description ne doit pas dépasser 1000 caractères'),
+  body('professeur').trim().notEmpty().withMessage('Le nom du professeur est requis')
+    .isLength({ max: 100 }).withMessage('Le nom du professeur ne doit pas dépasser 100 caractères'),
+  body('jour_semaine').notEmpty().withMessage('Le jour de la semaine est requis')
+    .isIn(['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche'])
+    .withMessage('Jour de la semaine invalide'),
+  body('heure_debut').notEmpty().withMessage('L\'heure de début est requise')
+    .matches(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9](:[0-5][0-9])?$/).withMessage('Format d\'heure invalide (HH:MM ou HH:MM:SS)'),
+  body('heure_fin').notEmpty().withMessage('L\'heure de fin est requise')
+    .matches(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9](:[0-5][0-9])?$/).withMessage('Format d\'heure invalide (HH:MM ou HH:MM:SS)'),
+  body('salle').trim().notEmpty().withMessage('La salle est requise')
+    .isLength({ max: 50 }).withMessage('La salle ne doit pas dépasser 50 caractères'),
   body('date_debut').notEmpty().withMessage('La date de début est requise')
-    .isISO8601().withMessage('Format de date de début invalide'),
-  body('date_fin').notEmpty().withMessage('La date de fin est requise')
-    .isISO8601().withMessage('Format de date de fin invalide'),
-  body('type').optional().trim()
-    .isIn(['reunion', 'formation', 'conges', 'autre']).withMessage('Type d\'événement invalide')
+    .isISO8601().withMessage('Format de date de début invalide')
 ]
 
 router.post('/events', eventValidation, validateRequest, adminController.createEvent)

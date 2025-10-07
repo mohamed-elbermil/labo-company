@@ -18,6 +18,11 @@ CREATE TABLE IF NOT EXISTS planning (
     id INT AUTO_INCREMENT PRIMARY KEY,
     titre VARCHAR(200) NOT NULL,
     description TEXT,
+    professeur VARCHAR(100) NOT NULL,
+    jour_semaine ENUM('Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche') NOT NULL,
+    heure_debut TIME NOT NULL,
+    heure_fin TIME NOT NULL,
+    salle VARCHAR(50) NOT NULL,
     date_debut DATETIME NOT NULL,
     date_fin DATETIME NOT NULL,
     type ENUM('reunion', 'formation', 'conges', 'autre') DEFAULT 'autre',
@@ -27,7 +32,9 @@ CREATE TABLE IF NOT EXISTS planning (
     FOREIGN KEY (created_by) REFERENCES utilisateurs(id) ON DELETE SET NULL,
     INDEX idx_dates (date_debut, date_fin),
     INDEX idx_type (type),
-    INDEX idx_created_by (created_by)
+    INDEX idx_created_by (created_by),
+    INDEX idx_jour_semaine (jour_semaine),
+    INDEX idx_professeur (professeur)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Insertion d'utilisateurs de test (mots de passe hachés avec bcrypt)
@@ -38,11 +45,11 @@ INSERT INTO utilisateurs (username, password, role) VALUES
 ('user', '$2b$10$cP3h8XqWLvJ5kV7UQz3w2eFTMW8oV5xN9kH2dXyK7tL6pY8wZ4qPe', 'user');
 
 -- Insertion d'événements de test
-INSERT INTO planning (titre, description, date_debut, date_fin, type, created_by) VALUES
-('Réunion d\'équipe', 'Réunion hebdomadaire de l\'équipe', '2025-10-06 09:00:00', '2025-10-06 10:30:00', 'reunion', 1),
-('Formation Docker', 'Formation sur Docker et les conteneurs', '2025-10-08 14:00:00', '2025-10-08 17:00:00', 'formation', 1),
-('Congés', 'Congés annuels', '2025-10-15 00:00:00', '2025-10-20 23:59:59', 'conges', 2),
-('Maintenance serveur', 'Maintenance planifiée des serveurs', '2025-10-10 22:00:00', '2025-10-11 02:00:00', 'autre', 1);
+INSERT INTO planning (titre, description, professeur, jour_semaine, heure_debut, heure_fin, salle, date_debut, date_fin, type, created_by) VALUES
+('Réunion d\'équipe', 'Réunion hebdomadaire de l\'équipe', 'M. Dupont', 'Lundi', '09:00:00', '10:30:00', 'Salle A101', '2025-10-06 09:00:00', '2025-10-06 10:30:00', 'reunion', 1),
+('Formation Docker', 'Formation sur Docker et les conteneurs', 'Mme Martin', 'Mercredi', '14:00:00', '17:00:00', 'Salle B205', '2025-10-08 14:00:00', '2025-10-08 17:00:00', 'formation', 1),
+('Congés', 'Congés annuels', 'N/A', 'Lundi', '00:00:00', '23:59:59', 'N/A', '2025-10-15 00:00:00', '2025-10-20 23:59:59', 'conges', 2),
+('Maintenance serveur', 'Maintenance planifiée des serveurs', 'M. Lefebvre', 'Jeudi', '22:00:00', '02:00:00', 'Salle Serveurs', '2025-10-10 22:00:00', '2025-10-11 02:00:00', 'autre', 1);
 
 -- Affichage des données insérées
 SELECT 'Utilisateurs créés:' AS info;

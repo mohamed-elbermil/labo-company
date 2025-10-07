@@ -1,26 +1,26 @@
-const express = require('express');
-const session = require('express-session');
-const cors = require('cors');
-const helmet = require('helmet');
-require('dotenv').config();
+const express = require('express')
+const session = require('express-session')
+const cors = require('cors')
+const helmet = require('helmet')
+require('dotenv').config()
 
-const authRoutes = require('./routes/auth');
-const planningRoutes = require('./routes/planning');
-const adminRoutes = require('./routes/admin');
+const authRoutes = require('./routes/auth')
+const planningRoutes = require('./routes/planning')
+const adminRoutes = require('./routes/admin')
 
-const app = express();
-const PORT = process.env.PORT;
+const app = express()
+const PORT = process.env.PORT
 
 // Middlewares de sécurité
-app.use(helmet());
+app.use(helmet())
 app.use(cors({
   origin: process.env.FRONTEND_URL,
   credentials: true
-}));
+}))
 
 // Parse JSON
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json())
+app.use(express.urlencoded({ extended: true }))
 
 // Configuration des sessions
 app.use(session({
@@ -32,12 +32,12 @@ app.use(session({
     httpOnly: true,
     maxAge: 1000 * 60 * 60 * 24 // 24 heures
   }
-}));
+}))
 
 // Routes
-app.use('/auth', authRoutes);
-app.use('/planning', planningRoutes);
-app.use('/admin', adminRoutes);
+app.use('/auth', authRoutes)
+app.use('/planning', planningRoutes)
+app.use('/admin', adminRoutes)
 
 // Route de test
 app.get('/health', (req, res) => {
