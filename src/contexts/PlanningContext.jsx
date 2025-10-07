@@ -15,58 +15,111 @@ export const PlanningProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   // Données par défaut du planning
-  const defaultEvents = [
-    { 
-      id: 1, 
-      day: 0, 
-      start: "09:00", 
-      end: "10:30", 
-      title: "Maths - DM Chapitre 2",
-      description: "Devoir maison sur les fonctions",
-      teacher: "M. Dupont",
-      room: "Salle 101"
-    },
-    { 
-      id: 2, 
-      day: 1, 
-      start: "11:00", 
-      end: "12:00", 
-      title: "Histoire - Lecture",
-      description: "Lecture de documents historiques",
-      teacher: "Mme Martin",
-      room: "Salle 205"
-    },
-    { 
-      id: 3, 
-      day: 2, 
-      start: "14:00", 
-      end: "16:00", 
-      title: "Physique - Exos série 3",
-      description: "Exercices de mécanique",
-      teacher: "M. Bernard",
-      room: "Labo Physique"
-    },
-    { 
-      id: 4, 
-      day: 3, 
-      start: "08:30", 
-      end: "09:30", 
-      title: "Anglais - Vocabulaire",
-      description: "Enrichissement du vocabulaire",
-      teacher: "Mme Johnson",
-      room: "Salle 103"
-    },
-    { 
-      id: 5, 
-      day: 4, 
-      start: "15:00", 
-      end: "17:00", 
-      title: "SVT - Compte-rendu TP",
-      description: "Rédaction du compte-rendu",
-      teacher: "M. Rousseau",
-      room: "Labo SVT"
-    },
-  ];
+  // Générer des événements pour différentes semaines
+  const generateDefaultEvents = () => {
+    const events = [];
+    const today = new Date();
+    
+    // Événements pour la semaine actuelle
+    const currentWeekEvents = [
+      { 
+        id: 1, 
+        day: 0, 
+        start: "09:00", 
+        end: "10:30", 
+        title: "Maths - DM Chapitre 2",
+        description: "Devoir maison sur les fonctions",
+        teacher: "M. Dupont",
+        room: "Salle 101",
+        weekOffset: 0
+      },
+      { 
+        id: 2, 
+        day: 1, 
+        start: "11:00", 
+        end: "12:00", 
+        title: "Histoire - Lecture",
+        description: "Lecture de documents historiques",
+        teacher: "Mme Martin",
+        room: "Salle 205",
+        weekOffset: 0
+      },
+      { 
+        id: 3, 
+        day: 2, 
+        start: "14:00", 
+        end: "16:00", 
+        title: "Physique - Exos série 3",
+        description: "Exercices de mécanique",
+        teacher: "M. Bernard",
+        room: "Labo Physique",
+        weekOffset: 0
+      },
+      { 
+        id: 4, 
+        day: 3, 
+        start: "08:30", 
+        end: "09:30", 
+        title: "Anglais - Vocabulaire",
+        description: "Enrichissement du vocabulaire",
+        teacher: "Mme Johnson",
+        room: "Salle 103",
+        weekOffset: 0
+      },
+      { 
+        id: 5, 
+        day: 4, 
+        start: "15:00", 
+        end: "17:00", 
+        title: "SVT - Compte-rendu TP",
+        description: "Rédaction du compte-rendu",
+        teacher: "M. Rousseau",
+        room: "Labo SVT",
+        weekOffset: 0
+      },
+    ];
+    
+    // Événements pour la semaine suivante
+    const nextWeekEvents = [
+      { 
+        id: 6, 
+        day: 0, 
+        start: "10:00", 
+        end: "11:30", 
+        title: "Maths - Contrôle",
+        description: "Contrôle sur les fonctions",
+        teacher: "M. Dupont",
+        room: "Salle 101",
+        weekOffset: 1
+      },
+      { 
+        id: 7, 
+        day: 2, 
+        start: "13:00", 
+        end: "15:00", 
+        title: "Physique - TP",
+        description: "Travaux pratiques de mécanique",
+        teacher: "M. Bernard",
+        room: "Labo Physique",
+        weekOffset: 1
+      },
+      { 
+        id: 8, 
+        day: 4, 
+        start: "09:00", 
+        end: "10:00", 
+        title: "Anglais - Oral",
+        description: "Présentation orale",
+        teacher: "Mme Johnson",
+        room: "Salle 103",
+        weekOffset: 1
+      },
+    ];
+    
+    return [...currentWeekEvents, ...nextWeekEvents];
+  };
+
+  const defaultEvents = generateDefaultEvents();
 
   useEffect(() => {
     // Simuler un délai de chargement
@@ -132,6 +185,10 @@ export const PlanningProvider = ({ children }) => {
     });
   };
 
+  const getEventsByWeek = (weekOffset) => {
+    return events.filter(event => event.weekOffset === weekOffset);
+  };
+
   const timeToMinutes = (timeStr) => {
     const [hours, minutes] = timeStr.split(':').map(Number);
     return hours * 60 + minutes;
@@ -165,6 +222,7 @@ export const PlanningProvider = ({ children }) => {
     deleteEvent,
     getEventsByDay,
     getEventsByTimeRange,
+    getEventsByWeek,
     checkTimeConflict,
     timeToMinutes,
     minutesToTime

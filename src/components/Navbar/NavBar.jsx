@@ -15,7 +15,7 @@ const Navbar = () => {
         <div className={styles.navbar_container}>
           {/* Logo */}
           <div className="text-2xl font-bold text-blue-600">
-            Labo Company
+            <a href="/home">Labo Company</a> 
           </div>
   
           {/* Navigation */}

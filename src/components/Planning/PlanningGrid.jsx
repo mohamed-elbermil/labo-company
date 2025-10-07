@@ -12,10 +12,11 @@ const timeSlots = [
 ];
 
 function PlanningGrid() {
-  const { events, loading, addEvent, updateEvent, deleteEvent } = usePlanning();
+  const { events, loading, addEvent, updateEvent, deleteEvent, getEventsByWeek } = usePlanning();
   const { isAdmin } = useUser();
   const [showEventForm, setShowEventForm] = useState(false);
   const [editingEvent, setEditingEvent] = useState(null);
+  const [currentWeek, setCurrentWeek] = useState(0); // 0 = semaine actuelle
 
   const handleAddEvent = () => {
     setEditingEvent(null);
@@ -37,8 +38,58 @@ function PlanningGrid() {
     if (editingEvent) {
       updateEvent(editingEvent.id, formData);
     } else {
-      addEvent(formData);
+      // Ajouter l'offset de semaine pour les nouveaux événements
+      const eventWithWeek = { ...formData, weekOffset: currentWeek };
+      addEvent(eventWithWeek);
     }
+  };
+
+  // Obtenir les événements pour la semaine actuelle
+  const currentWeekEvents = getEventsByWeek(currentWeek);
+
+  // Fonctions pour la navigation par semaines
+  const getWeekDates = (weekOffset) => {
+    const today = new Date();
+    const currentDay = today.getDay(); // 0 = dimanche, 1 = lundi, etc.
+    const mondayOffset = currentDay === 0 ? -6 : 1 - currentDay; // Ajuster pour commencer le lundi
+    
+    const monday = new Date(today);
+    monday.setDate(today.getDate() + mondayOffset + (weekOffset * 7));
+    
+    const weekDates = [];
+    for (let i = 0; i < 5; i++) {
+      const date = new Date(monday);
+      date.setDate(monday.getDate() + i);
+      weekDates.push(date);
+    }
+    
+    return weekDates;
+  };
+
+  const formatWeekRange = (weekOffset) => {
+    const weekDates = getWeekDates(weekOffset);
+    const start = weekDates[0];
+    const end = weekDates[4];
+    
+    if (weekOffset === 0) {
+      return `Semaine actuelle (${start.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit' })} - ${end.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit' })})`;
+    } else if (weekOffset > 0) {
+      return `Semaine +${weekOffset} (${start.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit' })} - ${end.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit' })})`;
+    } else {
+      return `Semaine ${weekOffset} (${start.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit' })} - ${end.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit' })})`;
+    }
+  };
+
+  const goToPreviousWeek = () => {
+    setCurrentWeek(prev => prev - 1);
+  };
+
+  const goToNextWeek = () => {
+    setCurrentWeek(prev => prev + 1);
+  };
+
+  const goToCurrentWeek = () => {
+    setCurrentWeek(0);
   };
 
   if (loading) {
@@ -54,6 +105,42 @@ function PlanningGrid() {
   }
   return (
     <div className="planning-wrapper">
+      {/* Navigation par semaines */}
+      <div className="week-navigation">
+        <button 
+          className="week-nav-btn"
+          onClick={goToPreviousWeek}
+          title="Semaine précédente"
+        >
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+          </svg>
+        </button>
+        
+        <div className="week-info">
+          <span className="week-title">{formatWeekRange(currentWeek)}</span>
+          {currentWeek !== 0 && (
+            <button 
+              className="current-week-btn"
+              onClick={goToCurrentWeek}
+              title="Retour à la semaine actuelle"
+            >
+              Revenir à la semaine actuelle
+            </button>
+          )}
+        </div>
+        
+        <button 
+          className="week-nav-btn"
+          onClick={goToNextWeek}
+          title="Semaine suivante"
+        >
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+          </svg>
+        </button>
+      </div>
+
       {isAdmin() && (
         <button 
           className="add-event-btn"
@@ -68,8 +155,11 @@ function PlanningGrid() {
 
       <div className="planning-header">
         <div className="planning-corner" />
-        {days.map((d) => (
-          <div key={d} className="planning-day">{d}</div>
+        {getWeekDates(currentWeek).map((date, index) => (
+          <div key={index} className="planning-day">
+            <div className="day-name">{days[index]}</div>
+            <div className="day-date">{date.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit' })}</div>
+          </div>
         ))}
       </div>
 
@@ -85,7 +175,7 @@ function PlanningGrid() {
             <div key={t} className="planning-row" />
           ))}
 
-          {events.map((evt) => (
+          {currentWeekEvents.map((evt) => (
             <EventBlock 
               key={evt.id} 
               evt={evt} 

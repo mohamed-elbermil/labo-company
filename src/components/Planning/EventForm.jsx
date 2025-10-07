@@ -10,7 +10,8 @@ const EventForm = ({ event, onClose, onSubmit }) => {
     room: '',
     day: 0,
     start: '09:00',
-    end: '10:00'
+    end: '10:00',
+    weekOffset: 0
   });
   const [errors, setErrors] = useState({});
 
@@ -38,7 +39,8 @@ const EventForm = ({ event, onClose, onSubmit }) => {
         room: event.room || '',
         day: event.day || 0,
         start: event.start || '09:00',
-        end: event.end || '10:00'
+        end: event.end || '10:00',
+        weekOffset: event.weekOffset || 0
       });
     }
   }, [event]);
