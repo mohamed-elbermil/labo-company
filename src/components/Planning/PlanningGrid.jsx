@@ -1,15 +1,9 @@
 // PlanningGrid.jsx
-import React from "react";
+import React, { useState } from "react";
+import { usePlanning } from "../../contexts/PlanningContext";
+import { useUser } from "../../contexts/UserContext";
+import EventForm from "./EventForm";
 import "./planning.css";
-
-// Données mock (front uniquement)
-const mockEvents = [
-  { id: 1, day: 0, start: "09:00", end: "10:30", title: "Maths - DM Chapitre 2" },
-  { id: 2, day: 1, start: "11:00", end: "12:00", title: "Histoire - Lecture" },
-  { id: 3, day: 2, start: "14:00", end: "16:00", title: "Physique - Exos série 3" },
-  { id: 4, day: 3, start: "08:30", end: "09:30", title: "Anglais - Vocabulaire" },
-  { id: 5, day: 4, start: "15:00", end: "17:00", title: "SVT - Compte-rendu TP" },
-];
 
 const days = ["Lun", "Mar", "Mer", "Jeu", "Ven"];
 const timeSlots = [
@@ -18,8 +12,60 @@ const timeSlots = [
 ];
 
 function PlanningGrid() {
+  const { events, loading, addEvent, updateEvent, deleteEvent } = usePlanning();
+  const { isAdmin } = useUser();
+  const [showEventForm, setShowEventForm] = useState(false);
+  const [editingEvent, setEditingEvent] = useState(null);
+
+  const handleAddEvent = () => {
+    setEditingEvent(null);
+    setShowEventForm(true);
+  };
+
+  const handleEditEvent = (event) => {
+    setEditingEvent(event);
+    setShowEventForm(true);
+  };
+
+  const handleDeleteEvent = (eventId) => {
+    if (window.confirm('Êtes-vous sûr de vouloir supprimer ce cours ?')) {
+      deleteEvent(eventId);
+    }
+  };
+
+  const handleSubmitEvent = (formData) => {
+    if (editingEvent) {
+      updateEvent(editingEvent.id, formData);
+    } else {
+      addEvent(formData);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="planning-wrapper">
+        <div style={{ textAlign: 'center', padding: '40px' }}>
+          <div style={{ fontSize: '18px', color: '#6b7280' }}>
+            Chargement du planning...
+          </div>
+        </div>
+      </div>
+    );
+  }
   return (
     <div className="planning-wrapper">
+      {isAdmin() && (
+        <button 
+          className="add-event-btn"
+          onClick={handleAddEvent}
+        >
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+          </svg>
+          Ajouter un cours
+        </button>
+      )}
+
       <div className="planning-header">
         <div className="planning-corner" />
         {days.map((d) => (
@@ -39,11 +85,25 @@ function PlanningGrid() {
             <div key={t} className="planning-row" />
           ))}
 
-          {mockEvents.map((evt) => (
-            <EventBlock key={evt.id} evt={evt} />
+          {events.map((evt) => (
+            <EventBlock 
+              key={evt.id} 
+              evt={evt} 
+              isAdmin={isAdmin()}
+              onEdit={handleEditEvent}
+              onDelete={handleDeleteEvent}
+            />
           ))}
         </div>
       </div>
+
+      {showEventForm && (
+        <EventForm
+          event={editingEvent}
+          onSubmit={handleSubmitEvent}
+          onClose={() => setShowEventForm(false)}
+        />
+      )}
     </div>
   );
 }
@@ -53,7 +113,7 @@ function minutesFrom(timeStr) {
   return h * 60 + m;
 }
 
-function EventBlock({ evt }) {
+function EventBlock({ evt, isAdmin, onEdit, onDelete }) {
   const gridStart = minutesFrom(evt.start);
   const gridEnd = minutesFrom(evt.end);
   const dayColumn = evt.day + 1; // 1..5 dans la grille (col 0 = heures)
@@ -72,9 +132,42 @@ function EventBlock({ evt }) {
   };
 
   return (
-    <div className="planning-event" style={style}>
+    <div 
+      className={`planning-event ${isAdmin ? 'editable' : ''}`} 
+      style={style}
+      onClick={isAdmin ? () => onEdit(evt) : undefined}
+    >
       <div className="planning-event-time">{evt.start} - {evt.end}</div>
       <div className="planning-event-title">{evt.title}</div>
+      {evt.teacher && (
+        <div className="planning-event-teacher">{evt.teacher}</div>
+      )}
+      {evt.room && (
+        <div className="planning-event-room">{evt.room}</div>
+      )}
+      
+      {isAdmin && (
+        <div className="planning-event-actions">
+          <button 
+            className="planning-event-btn edit"
+            onClick={(e) => {
+              e.stopPropagation();
+              onEdit(evt);
+            }}
+          >
+            Modifier
+          </button>
+          <button 
+            className="planning-event-btn delete"
+            onClick={(e) => {
+              e.stopPropagation();
+              onDelete(evt.id);
+            }}
+          >
+            Supprimer
+          </button>
+        </div>
+      )}
     </div>
   );
 }

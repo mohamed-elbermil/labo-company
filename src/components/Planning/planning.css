@@ -91,4 +91,253 @@
 	font-weight: 600;
 }
 
+.planning-event-teacher {
+	font-size: 11px;
+	color: #4338ca;
+	margin-top: 2px;
+	font-weight: 500;
+}
+
+.planning-event-room {
+	font-size: 10px;
+	color: #6b7280;
+	margin-top: 2px;
+	font-style: italic;
+}
+
+/* Styles pour le formulaire d'événements */
+.event-form-overlay {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background: rgba(0, 0, 0, 0.5);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	z-index: 1000;
+}
+
+.event-form-modal {
+	background: white;
+	border-radius: 16px;
+	box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+	max-width: 600px;
+	width: 90%;
+	max-height: 90vh;
+	overflow-y: auto;
+}
+
+.event-form-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 20px 24px;
+	border-bottom: 1px solid #e5e7eb;
+}
+
+.event-form-header h2 {
+	margin: 0;
+	font-size: 20px;
+	font-weight: 700;
+	color: #111827;
+}
+
+.event-form-close {
+	background: none;
+	border: none;
+	font-size: 24px;
+	color: #6b7280;
+	cursor: pointer;
+	padding: 4px;
+	border-radius: 4px;
+	transition: all 0.2s;
+}
+
+.event-form-close:hover {
+	background: #f3f4f6;
+	color: #374151;
+}
+
+.event-form {
+	padding: 24px;
+}
+
+.event-form-row {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 16px;
+	margin-bottom: 16px;
+}
+
+.event-form-field {
+	display: flex;
+	flex-direction: column;
+}
+
+.event-form-field label {
+	font-weight: 600;
+	color: #374151;
+	margin-bottom: 6px;
+	font-size: 14px;
+}
+
+.event-form-field input,
+.event-form-field select,
+.event-form-field textarea {
+	padding: 10px 12px;
+	border: 2px solid #e5e7eb;
+	border-radius: 8px;
+	font-size: 14px;
+	transition: all 0.2s;
+	background: white;
+}
+
+.event-form-field input:focus,
+.event-form-field select:focus,
+.event-form-field textarea:focus {
+	outline: none;
+	border-color: #6366f1;
+	box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
+
+.event-form-field input.error,
+.event-form-field select.error,
+.event-form-field textarea.error {
+	border-color: #ef4444;
+}
+
+.event-form-field textarea {
+	resize: vertical;
+	min-height: 80px;
+}
+
+.error-message {
+	color: #ef4444;
+	font-size: 12px;
+	margin-top: 4px;
+	font-weight: 500;
+}
+
+.global-error {
+	background: #fef2f2;
+	border: 1px solid #fecaca;
+	color: #dc2626;
+	padding: 12px;
+	border-radius: 8px;
+	margin-bottom: 16px;
+	font-size: 14px;
+}
+
+.event-form-actions {
+	display: flex;
+	gap: 12px;
+	justify-content: flex-end;
+	margin-top: 24px;
+	padding-top: 20px;
+	border-top: 1px solid #e5e7eb;
+}
+
+.btn-cancel,
+.btn-submit {
+	padding: 10px 20px;
+	border-radius: 8px;
+	font-weight: 600;
+	font-size: 14px;
+	cursor: pointer;
+	transition: all 0.2s;
+	border: none;
+}
+
+.btn-cancel {
+	background: #f3f4f6;
+	color: #374151;
+	border: 1px solid #d1d5db;
+}
+
+.btn-cancel:hover {
+	background: #e5e7eb;
+}
+
+.btn-submit {
+	background: #6366f1;
+	color: white;
+}
+
+.btn-submit:hover {
+	background: #5b21b6;
+}
+
+/* Bouton d'ajout d'événement */
+.add-event-btn {
+	background: #10b981;
+	color: white;
+	border: none;
+	padding: 12px 20px;
+	border-radius: 10px;
+	font-weight: 600;
+	cursor: pointer;
+	transition: all 0.2s;
+	margin-bottom: 20px;
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+
+.add-event-btn:hover {
+	background: #059669;
+	transform: translateY(-1px);
+}
+
+.add-event-btn svg {
+	width: 16px;
+	height: 16px;
+}
+
+/* Styles pour les événements interactifs */
+.planning-event.editable {
+	cursor: pointer;
+	transition: all 0.2s;
+}
+
+.planning-event.editable:hover {
+	transform: translateY(-2px);
+	box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+}
+
+.planning-event-actions {
+	display: flex;
+	gap: 8px;
+	margin-top: 8px;
+}
+
+.planning-event-btn {
+	background: rgba(255, 255, 255, 0.9);
+	border: 1px solid #e5e7eb;
+	border-radius: 6px;
+	padding: 4px 8px;
+	font-size: 11px;
+	cursor: pointer;
+	transition: all 0.2s;
+}
+
+.planning-event-btn.edit {
+	color: #6366f1;
+}
+
+.planning-event-btn.edit:hover {
+	background: #6366f1;
+	color: white;
+}
+
+.planning-event-btn.delete {
+	color: #ef4444;
+}
+
+.planning-event-btn.delete:hover {
+	background: #ef4444;
+	color: white;
+}
+
 

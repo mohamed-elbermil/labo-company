@@ -1,6 +1,7 @@
 // Register.jsx
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useUser } from "../contexts/UserContext";
 import "./auth.css";
 
 function Register() {
@@ -9,25 +10,44 @@ function Register() {
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+  const { register } = useUser();
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
     setError("");
+    setLoading(true);
+    
     if (!username || !email || !password || !confirm) {
       setError("Tous les champs sont requis.");
+      setLoading(false);
       return;
     }
     if (username.length < 3) {
       setError("Le pseudo doit contenir au moins 3 caractères.");
+      setLoading(false);
       return;
     }
     if (password !== confirm) {
       setError("Les mots de passe ne correspondent pas.");
+      setLoading(false);
       return;
     }
-    // Front uniquement pour l'instant
-    console.log("Register form submitted", { username, email, password });
-    alert("Inscription simulée (front uniquement)");
+
+    try {
+      const result = await register(username, email, password);
+      
+      if (result.success) {
+        navigate("/home", { replace: true });
+      } else {
+        setError(result.error || "Une erreur est survenue lors de l'inscription.");
+      }
+    } catch (err) {
+      setError("Une erreur est survenue lors de l'inscription.");
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
@@ -87,7 +107,9 @@ function Register() {
             />
           </div>
 
-          <button type="submit" className="auth-submit">S'inscrire</button>
+          <button type="submit" className="auth-submit" disabled={loading}>
+            {loading ? 'Inscription...' : 'S\'inscrire'}
+          </button>
         </form>
 
         <p className="auth-footer">

@@ -7,5 +7,37 @@
 .navbar_container {
     display: flex;
     align-items: center;
+    justify-content: space-between;
     margin-left: 1em;
+    width: 100%;
+    padding: 0 20px;
+}
+
+.user_info {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.user_name {
+    font-size: 14px;
+    color: #374151;
+    font-weight: 500;
+}
+
+.logout_btn {
+    background: #ef4444;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.logout_btn:hover {
+    background: #dc2626;
+    transform: translateY(-1px);
 }

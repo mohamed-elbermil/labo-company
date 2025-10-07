@@ -1,25 +1,41 @@
 // Login.jsx
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useUser } from "../contexts/UserContext";
 import "./auth.css";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const { login } = useUser();
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
     setError("");
+    setLoading(true);
+    
     if (!email || !password) {
       setError("Veuillez renseigner l'email et le mot de passe.");
+      setLoading(false);
       return;
     }
-    // Front uniquement pour l'instant
-    console.log("Login form submitted", { email, password });
-    // Redirection simulée vers /home
-    navigate("/home", { replace: true });
+
+    try {
+      const result = await login(email, password);
+      
+      if (result.success) {
+        navigate("/home", { replace: true });
+      } else {
+        setError(result.error);
+      }
+    } catch (err) {
+      setError("Une erreur est survenue lors de la connexion.");
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
@@ -57,8 +73,25 @@ function Login() {
             />
           </div>
 
-          <button type="submit" className="auth-submit">Se connecter</button>
+          <button type="submit" className="auth-submit" disabled={loading}>
+            {loading ? 'Connexion...' : 'Se connecter'}
+          </button>
         </form>
+
+        <div style={{ 
+          background: '#f0f9ff', 
+          border: '1px solid #bae6fd', 
+          borderRadius: '8px', 
+          padding: '12px', 
+          marginTop: '20px',
+          fontSize: '14px'
+        }}>
+          <strong>Comptes de test :</strong>
+          <br />
+          <strong>Admin :</strong> admin@labo-company.com / admin123
+          <br />
+          <strong>Étudiant :</strong> etudiant1@labo-company.com / student123
+        </div>
 
         <p className="auth-footer">
           Pas de compte ? {" "}
